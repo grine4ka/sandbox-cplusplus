@@ -10,6 +10,14 @@
  * Определите для класса Rational операторы сложения, вычитания, умножения и деления,
  * так чтобы объекты типа Rational можно было складывать (вычитать, умножать и делить) не только друг с другом но и с целыми числами.
  *
+ * Третья часть
+ * Еще одна важная группа операторов, которые полезно реализовать для класса рациональных чисел — это операторы сравнения.
+ * Реализуйте операторы <, <=, >, >=, ==, != для класса Rational так, чтобы можно было сравнивать объекты класса Rational не только друг с другом, но и с целыми числами.
+ *
+ * Четвертая часть
+ * Добавьте в класс Rational оператор приведения к double.
+ * Все операторы из предыдущих заданий отсутствуют и реализовывать их не нужно. Метод to_double можно использовать в этом задании.
+ *
  */
 #include <iostream>
 
@@ -78,6 +86,20 @@ struct Rational {
         return rn;
     }
 
+    // Третья часть
+    friend bool operator<(Rational const &r1, Rational const &r) {
+        return (r1.numerator_ * r.denominator_) < (r.numerator_ * r1.denominator_);
+    }
+
+    friend bool operator==(Rational const &r1, Rational const &r) {
+        return (r1.numerator_ * r.denominator_) == (r.numerator_ * r1.denominator_);
+    }
+
+    // Четвертая часть
+    operator double() const {
+        return this->to_double();
+    }
+
 private:
     int numerator_;
     int denominator_;
@@ -100,35 +122,49 @@ Rational operator/(Rational r1, Rational const &r) {
     return r1/=r;
 }
 
+// Третья часть
+bool operator!=(Rational const &r1, Rational const &r) {
+    return !(r1 == r);
+}
+
+bool operator>(Rational const &r1, Rational const &r) {
+    return r < r1;
+}
+
+bool operator<=(Rational const &r1, Rational const &r) {
+    return !(r < r1);
+}
+
+bool operator>=(Rational const &r1, Rational const &r) {
+    return !(r1 < r);
+}
+
 int main() {
     Rational r1(1, 2);
     Rational r2(1, 3);
     Rational r3(5);
 
-    r1.add(r2);
+    // Первая часть
+    r1 += r2;
     std::cout << r1.to_double() << std::endl;
-    r1.sub(r2);
+    r1 -= r2;
     std::cout << r1.to_double() << std::endl;
-    r1.neg();
-    std::cout << r1.to_double() << std::endl;
-    r3.mul(r1);
-    std::cout << r3.to_double() << std::endl;
-    r3.div(r2);
-    std::cout << r3.to_double() << std::endl;
-
-    Rational r4(1, 2);
-    Rational r5(1, 3);
-    Rational r6(5);
-
-    r4 += r5;
-    std::cout << r4.to_double() << std::endl;
-    r4 -= r5;
-    std::cout << r4.to_double() << std::endl;
-    Rational rm = -r4;
+    Rational rm = -r1;
     std::cout << rm.to_double() << std::endl;
-    r6 *= rm;
-    std::cout << r6.to_double() << std::endl;
-    r6 /= r5;
-    std::cout << r6.to_double() << std::endl;
+    r3 *= rm;
+    std::cout << r3.to_double() << std::endl;
+    r3 /= r2;
+    std::cout << r3.to_double() << std::endl;
+
+    // Третья часть
+    Rational r4(5, 10);
+    std::cout << (r1 == r4) << std::endl;
+    Rational r5(2, 3);
+    Rational r6(3, 4);
+    std::cout << (r5 >= r6) << std::endl;
+
+    // Четвертая часть
+    double d = (double) r1;
+    std::cout << d << std::endl;
 }
 
